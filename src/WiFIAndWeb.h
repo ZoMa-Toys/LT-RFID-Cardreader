@@ -20,7 +20,7 @@ const char* websockets_server_path = "/ws"; //Enter server adress
 String debug = "";
 StaticJsonDocument<2048>  messageJSONToSend;
 
-String TrainName="Green";
+String TrainName="a";
 StaticJsonDocument<1024> CardMap;
 
 
@@ -139,13 +139,13 @@ void recvMsg(uint8_t *data, size_t len){
     WebSerial.println("Reseting ESP");
     ESP.restart();
   }
-  else if (d.indexOf(String("TrainName:"))>-1){
-    TrainName = d.substring(11,d.length()).toInt();
+  else if (d.indexOf(String("NewTrainName:"))>-1){
+    TrainName = d.substring(14,d.length());
     WebSerial.print("Setting TrainName to ");
     WebSerial.println(TrainName);
   }
   else if (d.indexOf(String("Help"))>-1){
-    WebSerial.println("TrainName:<NAME OF THE TRAIN>");
+    WebSerial.println("NewTrainName:<NAME OF THE TRAIN>");
     WebSerial.println("DebugOff");
     WebSerial.println("DebugOn");
     WebSerial.println("ResetESP");

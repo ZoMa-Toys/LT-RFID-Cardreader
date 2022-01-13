@@ -19,14 +19,18 @@ void setupMFRC(){
   delay(500);
 }
 
-String dump_byte_array(byte *buffer, byte bufferSize) {
+String getUID(byte *buffer, byte bufferSize) {
   String UID;
   for (byte i = 0; i < bufferSize; i++) {
     UID.concat(String(buffer[i] < 0x10 ? " 0" : " "));
     UID.concat(String(buffer[i], HEX));
   }
   UID.toUpperCase();
-  return UID.substring(1);
+  debugPrint("UID UC:" + UID);
+  UID.substring(1);
+  debugPrint("UID SS:" + UID.substring(1));
+  UID = UID.substring(1);
+  return UID;
 }
 
 
@@ -36,8 +40,12 @@ void fillCardMap(String UID){
     CardMap[UID]=nextIndex;
     debugPrint(UID + " added with index " + nextIndex);
     messageJSONToSend["action"]="CardMap";
-    StaticJsonDocument<1024> message = messageJSONToSend.createNestedObject("message");
-    message = CardMap;
+    messageJSONToSend["message"]=CardMap;
+ //   JsonObject message = messageJSONToSend.createNestedObject("message");
+  //  message = CardMap.as<JsonObject>();
+    String dp;
+    serializeJson(messageJSONToSend,dp);
+    debugPrint("UMJ" + dp);
   }
 }
 
@@ -53,14 +61,17 @@ void cardLoop() {
   {
     return;
   }
-  debugPrint("UID tag :");  
-  String UID= dump_byte_array(mfrc522.uid.uidByte,mfrc522.uid.size);
+  String UID = getUID(mfrc522.uid.uidByte,mfrc522.uid.size);
+  debugPrint("UID tag :" + UID);  
+  delay(1000);
   fillCardMap(UID);
   if (UID!=""){
     messageJSONToSend["action"]="cardChecked";
-    StaticJsonDocument<200> message = messageJSONToSend.createNestedObject("message");
+    JsonObject message = messageJSONToSend.createNestedObject("message");
+    int CardIndex = CardMap[UID].as<int>();
+
     message["train"]=TrainName;
-    message["cardIndex"]=CardMap[UID];
+    message["cardIndex"]=CardIndex;
   }
 } 
 
