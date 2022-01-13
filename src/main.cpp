@@ -12,6 +12,8 @@ void setup() {
   createWebSerial();
   createOTA();
   setupMFRC();
+  messageJSONToSend["action"]="getCardMap";
+  
 }
 
 void loop() {

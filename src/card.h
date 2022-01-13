@@ -45,7 +45,8 @@ void fillCardMap(String UID){
   //  message = CardMap.as<JsonObject>();
     String dp;
     serializeJson(messageJSONToSend,dp);
-    debugPrint("UMJ" + dp);
+    debugPrint("MJ" + dp);
+    sendJSON();
   }
 }
 
@@ -63,8 +64,9 @@ void cardLoop() {
   }
   String UID = getUID(mfrc522.uid.uidByte,mfrc522.uid.size);
   debugPrint("UID tag :" + UID);  
-  delay(1000);
+  delay(400);
   fillCardMap(UID);
+  delay(400);
   if (UID!=""){
     messageJSONToSend["action"]="cardChecked";
     JsonObject message = messageJSONToSend.createNestedObject("message");
