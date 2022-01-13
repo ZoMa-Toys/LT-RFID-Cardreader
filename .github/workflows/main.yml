@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        port: [8087]
+        host: ['http://guberkray.myftp.org:8087','http://zoma.asuscomm.com:20402']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -37,4 +37,4 @@ jobs:
           -H 'Accept-Encoding: gzip, deflate' 
           -H 'Connection: keep-alive' 
           -F "MD5="$(md5sum .pio/build/esp32dev/firmware.bin | cut -d ' ' -f 1)"" 
-          -F 'firmware=@.pio/build/esp32dev/firmware.bin' 'http://guberkray.myftp.org:${{ matrix.port }}/update'
+          -F 'firmware=@.pio/build/esp12e/firmware.bin' '${{ matrix.host }}/update'
