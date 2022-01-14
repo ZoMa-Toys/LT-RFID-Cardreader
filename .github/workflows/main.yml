@@ -22,7 +22,7 @@ jobs:
       
         include:
           - host: guberkray.myftp.org
-            port: 8087
+            port: 8266
             
 
     # Steps represent a sequence of tasks that will be executed as part of the job
