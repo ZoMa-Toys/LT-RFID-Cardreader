@@ -35,5 +35,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build for ESP8266
         run: pio run --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB
-        env: PLATFORMIO_UPLOAD_FLAGS=--port ${{ matrix.port }}
+        env: 
+          PLATFORMIO_UPLOAD_FLAGS: --port ${{ matrix.port }}
 
