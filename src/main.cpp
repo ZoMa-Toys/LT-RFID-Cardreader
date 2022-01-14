@@ -17,6 +17,7 @@ void setup() {
 }
 
 void loop() {
+  ArduinoOTA.handle();
   // let the websockets client check for incoming messages
   if(client.available()) {
     client.poll();
