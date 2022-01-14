@@ -36,5 +36,5 @@ jobs:
       - name: Build for ESP8266
         run: pio run --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB
         env: 
-          PLATFORMIO_UPLOAD_FLAGS: --port ${{ matrix.port }}
+          PLATFORMIO_UPLOAD_FLAGS: --port=${{ matrix.port }}
 
