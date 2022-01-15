@@ -19,22 +19,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-      
-        include:
-          - host: guberkray.myftp.org
-            port: 8266
+        host: [192.168.1.87,192.168.1.200,192.168.1.220]
+
             
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      - name: Installing platformio
-        run: pip3 install -U platformio
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          sudo chmod 600 ~/.ssh/id_rsa
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
       # Runs a set of commands using the runners shell
       - name: Build for ESP8266
-        run: pio run --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB
-        env: 
-          PLATFORMIO_UPLOAD_FLAGS: --port=${{ matrix.port }}
+        run: ssh tguber@guberkray.myftp.org "cd LTS_CardReader && git pull origin master && pio run --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB"
 

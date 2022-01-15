@@ -13,17 +13,28 @@
 #include <ArduinoOTA.h>
 
 #ifndef STASSID
-#define STASSID "Guber-Kray"
-#define STAPSK  "Hafnium1985!"
+#define STASSID "SOMEWIFI"
 #endif
+#ifndef STAPSK
+#define STAPSK  "SecretPW"
+#endif
+
+#ifndef WSHOST
+#define WSHOST "RANDOMHOST"
+#endif
+
+#ifndef WSPORT
+#define WSPORT 80
+#endif
+
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
 
 using namespace websockets;
 
-const char* websockets_server_host = "192.168.1.88"; //Enter server adress
-const uint16_t websockets_server_port = 80; // Enter server port
+const char* websockets_server_host = WSHOST; //Enter server adress
+const uint16_t websockets_server_port = WSPORT; // Enter server port
 const char* websockets_server_path = "/ws"; //Enter server adress
 String debug = "";
 StaticJsonDocument<2048>  messageJSONToSend;
@@ -66,7 +77,7 @@ void sendJSON(){
 
 void onDataReceived(String msg){
   debugPrint("Incoming WS msg: " + msg);
-  StaticJsonDocument<2048>  messageJSON;
+  StaticJsonDocument<40096>  messageJSON;
   if (msg.indexOf("TrackConfig")==-1){
       DeserializationError error = deserializeJson(messageJSON, msg);
       if (error) {
@@ -144,15 +155,21 @@ void recvMsg(uint8_t *data, size_t len){
     ESP.restart();
   }
   else if (d.indexOf(String("NewTrainName:"))>-1){
-    TrainName = d.substring(14,d.length());
+    TrainName = d.substring(13,d.length());
     WebSerial.print("Setting TrainName to ");
     WebSerial.println(TrainName);
+  }
+  else if (d.indexOf(String("ShowCards"))>-1){
+    String dp;
+    serializeJson(CardMap,dp);
+    WebSerial.println("CardMap:" + dp);
   }
   else if (d.indexOf(String("Help"))>-1){
     WebSerial.println("NewTrainName:<NAME OF THE TRAIN>");
     WebSerial.println("DebugOff");
     WebSerial.println("DebugOn");
     WebSerial.println("ResetESP");
+    WebSerial.println("ShowCards");
   }
   WebSerial.println(d);
 }
