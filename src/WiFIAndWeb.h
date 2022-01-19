@@ -78,7 +78,7 @@ void sendJSON(){
 void onDataReceived(String msg){
   debugPrint("Incoming WS msg: " + msg);
   StaticJsonDocument<40096>  messageJSON;
-  if (msg.indexOf("TrackConfig")==-1){
+  if (msg.indexOf("Status")>-1 && msg.indexOf("CardMap")>-1){
       DeserializationError error = deserializeJson(messageJSON, msg);
       if (error) {
           debugPrint("deserializeJson() failed: ");
@@ -86,14 +86,7 @@ void onDataReceived(String msg){
       return;
       }
   }
-
-  if(messageJSON.containsKey("action")){
-    if(messageJSON["action"]=="CardMap"){
-          debugPrint("Fill Cardmap");
-    }
-  }
-    
-  else if(messageJSON.containsKey("Status")){
+  if(messageJSON.containsKey("Status")){
       if(messageJSON["Status"]=="CardMap:"){
           debugPrint("Fill Cardmap");
           CardMap = messageJSON["Message"];
@@ -170,6 +163,7 @@ void recvMsg(uint8_t *data, size_t len){
     WebSerial.println("DebugOn");
     WebSerial.println("ResetESP");
     WebSerial.println("ShowCards");
+    WebSerial.println("asdfadhsd");
   }
   WebSerial.println(d);
 }

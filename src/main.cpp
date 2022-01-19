@@ -13,7 +13,7 @@ void setup() {
   createOTA();
   setupMFRC();
   messageJSONToSend["action"]="getCardMap";
-  
+  SetTranCardMap();
 }
 
 void loop() {
