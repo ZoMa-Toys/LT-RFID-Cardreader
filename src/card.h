@@ -13,7 +13,8 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 unsigned long startMillis;  //some global variables available anywhere in the program
 unsigned long currentMillis;
-const unsigned long period = 300;
+const unsigned long period = 1000;
+String lastUID;
 
 void setupMFRC(){
   SPI.begin();      // Initiate  SPI bus
@@ -35,7 +36,7 @@ StaticJsonDocument<200> TrainCard;
 void SetTranCardMap(){
   String Maestro="BF189BB5";
   String hetes="E49E2E33";
-  TrainCard[Maestro]="SÁRGA";
+  TrainCard[Maestro]="Yellow";
   TrainCard[hetes]="Green";
 }
 
@@ -63,22 +64,22 @@ void cardLoop() {
   {
     return;
   }
-  if ((currentMillis - startMillis)>period){
-    String UID = getUID(mfrc522.uid.uidByte,mfrc522.uid.size);  
-    debugPrint(UID);
-    if (TrainCard.containsKey(UID)){
-      TrainName = TrainCard[UID].as<String>();
-      debugPrint("Train name is: " + TrainName);
-    }
-    else if (UID!=""){
-      fillCardMap(UID);
+  String UID = getUID(mfrc522.uid.uidByte,mfrc522.uid.size);  
+  if (TrainCard.containsKey(UID)){
+    TrainName = TrainCard[UID].as<String>();
+    debugPrint("Train name is: " + TrainName);
+  }
+  else if (UID!=""){
+    fillCardMap(UID);
+    if ((currentMillis - startMillis)>period || lastUID != UID){
       messageJSONToSend["action"]="cardChecked";
       JsonObject message = messageJSONToSend.createNestedObject("message");
       int CardIndex = CardMap[UID].as<int>();
       message["train"]=TrainName;
       message["cardIndex"]=CardIndex;
+      startMillis=currentMillis;
+      lastUID=UID;
     }
-    startMillis=currentMillis;
   }
 } 
 

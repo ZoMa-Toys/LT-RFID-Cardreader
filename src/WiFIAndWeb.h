@@ -27,6 +27,9 @@
 #define WSPORT 80
 #endif
 
+#ifndef TRAINNAME
+#define TRAINNAME "DUMMY"
+#endif
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
@@ -39,7 +42,7 @@ const char* websockets_server_path = "/ws"; //Enter server adress
 String debug = "";
 StaticJsonDocument<2048>  messageJSONToSend;
 
-String TrainName="a";
+String TrainName=TRAINNAME;
 StaticJsonDocument<1024> CardMap;
 
 
