@@ -31,6 +31,10 @@
 #define TRAINNAME "DUMMY"
 #endif
 
+#ifndef DBG
+#define DBG ""
+#endif
+
 const char* ssid = STASSID;
 const char* password = STAPSK;
 
@@ -39,7 +43,7 @@ using namespace websockets;
 const char* websockets_server_host = WSHOST; //Enter server adress
 const uint16_t websockets_server_port = WSPORT; // Enter server port
 const char* websockets_server_path = "/ws"; //Enter server adress
-String debug = "";
+String debug = DBG;
 StaticJsonDocument<2048>  messageJSONToSend;
 
 String TrainName=TRAINNAME;
@@ -81,19 +85,17 @@ void sendJSON(){
 void onDataReceived(String msg){
   debugPrint("Incoming WS msg: " + msg);
   StaticJsonDocument<40096>  messageJSON;
-  if (msg.indexOf("Status")>-1 && msg.indexOf("CardMap")>-1){
-      DeserializationError error = deserializeJson(messageJSON, msg);
-      if (error) {
-          debugPrint("deserializeJson() failed: ");
-          debugPrint(error.f_str());
-      return;
-      }
+  DeserializationError error = deserializeJson(messageJSON, msg);
+  if (error) {
+    debugPrint("deserializeJson() failed: ");
+    debugPrint(error.f_str());
+    return;
   }
   if(messageJSON.containsKey("Status")){
-      if(messageJSON["Status"]=="CardMap:"){
-          debugPrint("Fill Cardmap");
-          CardMap = messageJSON["Message"];
-      }
+    if(messageJSON["Status"]=="CardMap:"){
+      debugPrint("Fill Cardmap");
+      CardMap = messageJSON["Message"];
+    }
   }
 }
 
@@ -126,9 +128,11 @@ void connectWS(){
         Serial.println("Not Connected!");
     }
     client.onMessage([&](WebsocketsMessage message){
+      if(message.length() <2048){
         String msg;
         msg=message.data();
         onDataReceived(msg);
+      }
     });
 }
 
