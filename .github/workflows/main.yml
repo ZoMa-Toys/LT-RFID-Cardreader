@@ -46,4 +46,4 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
       # Runs a set of commands using the runners shell
       - name: Build and Upload to ESP8266
-        run: ssh tguber@guberkray.myftp.org "cd LTS_CardReader && git pull origin master && git submodule update --recursive --remote && export TRAINNAME='\\"${{ matrix.train }}\\"' && export THISMDNS='\\"${{ matrix.localDNS }}\\"' && /home/tguber/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB"
+        run: ssh tguber@guberkray.myftp.org "cd LTS_CardReader && git pull origin master && git submodule update --recursive --remote && export TRAINNAME='\\\"${{ matrix.train }}\\\"' && export THISMDNS='\\\"${{ matrix.localDNS }}\\\"' && /home/tguber/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB"
