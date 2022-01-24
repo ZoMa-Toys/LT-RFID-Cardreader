@@ -1,15 +1,11 @@
-#include "WiFIAndWeb.h"
-
-
-
-
+#include "card.h"
 
 void setup() {
   Serial.begin(115200);
   // Connect to wifi
   connectWifi();
-  connectWS();
-  createWebSerial();
+  connectWS(onDataReceived);
+  createWebSerial(recvMsg);
   createOTA();
   setupMFRC();
   messageJSONToSend["action"]="getCardMap";
