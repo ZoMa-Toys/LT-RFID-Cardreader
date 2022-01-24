@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        includes:
+        include:
           - host: 192.168.1.200
             train: Yellow
             localDNS: yellow
