@@ -19,7 +19,16 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        host: [192.168.1.87,192.168.1.200,192.168.1.220]
+        includes:
+          - host: 192.168.1.200
+            train: Yellow
+            localDNS: yellow
+          - host: 192.168.1.220
+            train: Green
+            localDNS: green
+          - host: 192.168.1.87
+            train: Small
+            localDNS: small
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -37,4 +46,4 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
       # Runs a set of commands using the runners shell
       - name: Build and Upload to ESP8266
-        run: ssh tguber@guberkray.myftp.org "cd LTS_CardReader && git pull origin master && /home/tguber/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB"
+        run: ssh tguber@guberkray.myftp.org "cd LTS_CardReader && git pull origin master && export PLATFORMIO_BUILD_FLAGS=-DTRAINNAME=\"${{ matrix.train }}\" -DTHISMDNS=\"${{ matrix.localDNS }}\" && /home/tguber/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB"
