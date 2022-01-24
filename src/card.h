@@ -2,7 +2,7 @@
 #define card_h
 
 //RFID
-#include "WiFIAndWeb.h"
+#include "WifiAndWeb.h"
 
 #include <SPI.h>
 #include <MFRC522.h>
