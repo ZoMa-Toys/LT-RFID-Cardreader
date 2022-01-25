@@ -47,8 +47,7 @@ jobs:
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
     needs: [build]
     outputs:
-      matrix: ${{ steps.echo.outputs.matrix }}
-      matrix2: ${{ steps.set-matrix.outputs.matrix }}
+      hostmatrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
     - name: Set up SSH
       run: |
@@ -63,19 +62,26 @@ jobs:
     - id: set-matrix
       name: Create matrix for next job
       run: ssh tguber@guberkray.myftp.org "/home/tguber/makeMatrix.py"
-    - id: echo
-      name: test with echo
-      run: echo "::set-output name=matrix::[{\"host\":\"192.168.1.87\", \"train\":\"DUMMY\",\"localNDS\":\"dummy\"}]"
-  buildandupload:
+  test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     if: ${{always() && contains(join(needs.*.result, ','), 'success') }}
+    needs: [creatematrix]
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: test
+        run: echo ${{needs.creatematrix.outputs.hostmatrix}}
+
+  buildandupload:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    if: ${{fromJson(needs.creatematrix.outputs.hostmatrix).include[0] && {always() && contains(join(needs.*.result, ','), 'success') }}
     needs: [creatematrix]
     strategy:
       fail-fast: false
       max-parallel: 1
       matrix:
-          ${{fromJson(needs.creatematrix.outputs.matrix)}}
+          ${{fromJson(needs.creatematrix.outputs.hostmatrix)}}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Set up SSH
