@@ -40,8 +40,8 @@ jobs:
     - name: Run PlatformIO
       run: pio run -e d1_mini_pro_GITHUB
       env:
-        TRAINNAME: '\\\"TEST\\\"'
-        THISMDNS: '\\\"test\\\"'
+        TRAINNAME: '\"TEST\"'
+        THISMDNS: '\"test\"'
   creatematrix:
     runs-on: ubuntu-latest
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
