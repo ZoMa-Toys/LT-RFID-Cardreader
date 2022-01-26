@@ -10,7 +10,7 @@ This project is part of the [ZoMa Lego Train](https://github.com/GuBee33/ZoMa-Le
 
 Clone the project and **init submodule** too.
 ```
-git clone https://github.com/GuBee33/LTS_CardReader.git
+git clone https://github.com/GuBee33/ZoMa-LT-RFID-Cardreader.git
 git submodule update --init --recursive
 ```
 ### Usage
