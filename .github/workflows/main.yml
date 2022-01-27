@@ -38,10 +38,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install --upgrade platformio
     - name: Run PlatformIO
-      run: pio run -e d1_mini_pro_GITHUB
+      run: pio run -e GITHUB
       env:
         TRAINNAME: '\"TEST\"'
         THISMDNS: '\"test\"'
+        STASSID: '\"${{secrets.STASSID}}\"'
+        STAPSK: '\"${{secrets.STAPSK}}\"'
+        WSHOST: '\"${{secrets.WSHOST}}\"'
+        WSPORT: '\"${{secrets.WSPORT}}\"'
   creatematrix:
     runs-on: ubuntu-latest
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
@@ -61,7 +65,7 @@ jobs:
         SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
     - id: set-matrix
       name: Create matrix for next job
-      run: ssh tguber@guberkray.myftp.org "/home/tguber/makeMatrix.py card"
+      run: ssh ${{secrets.USER}}@${{secrets.HOST}} "~/makeMatrix.py card"
   buildandupload:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -86,4 +90,4 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
       # Runs a set of commands using the runners shell
       - name: Build and Upload to ESP8266
-        run: ssh tguber@guberkray.myftp.org "cd LTS_CardReader && git pull origin master && git submodule update --recursive --remote && export TRAINNAME='\\\"${{ matrix.train }}\\\"' && export THISMDNS='\\\"${{ matrix.localDNS }}\\\"' && /home/tguber/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e d1_mini_pro_GITHUB"
+        run: ssh ${{secrets.USER}}@${{secrets.HOST}} "rm -rf buildRepo && git clone --recursive ${{github.repositoryUrl}} buildRepo && export STASSID='\\\"${{secrets.STASSID}}\\\"' && export STAPSK='\\\"${{secrets.STAPSK}}\\\"' && export WSHOST='\\\"${{secrets.WSHOST}}\\\"' && export WSPORT='\\\"${{secrets.WSPORT}}\\\"' && export TRAINNAME='\\\"${{ matrix.train }}\\\"' && export THISMDNS='\\\"${{ matrix.localDNS }}\\\"' && ~/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e GITHUB && rm -rf buildRepo"
