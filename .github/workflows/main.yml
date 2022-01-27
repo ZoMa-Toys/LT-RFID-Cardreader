@@ -45,7 +45,8 @@ jobs:
         STASSID: '\"${{secrets.STASSID}}\"'
         STAPSK: '\"${{secrets.STAPSK}}\"'
         WSHOST: '\"${{secrets.WSHOST}}\"'
-        WSPORT: '\"${{secrets.WSPORT}}\"'
+        WSPORT: '${{secrets.WSPORT}}'
+        WSPATH: '\"${{secrets.WSPATH}}\"'
   creatematrix:
     runs-on: ubuntu-latest
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
@@ -90,4 +91,4 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
       # Runs a set of commands using the runners shell
       - name: Build and Upload to ESP8266
-        run: ssh ${{secrets.USER}}@${{secrets.HOST}} "rm -rf buildRepo && git clone --recursive ${{github.repositoryUrl}} buildRepo && export STASSID='\\\"${{secrets.STASSID}}\\\"' && export STAPSK='\\\"${{secrets.STAPSK}}\\\"' && export WSHOST='\\\"${{secrets.WSHOST}}\\\"' && export WSPORT='\\\"${{secrets.WSPORT}}\\\"' && export TRAINNAME='\\\"${{ matrix.train }}\\\"' && export THISMDNS='\\\"${{ matrix.localDNS }}\\\"' && ~/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e GITHUB && rm -rf buildRepo"
+        run: ssh ${{secrets.USER}}@${{secrets.HOST}} "rm -rf buildRepo && git clone --recursive ${{github.repositoryUrl}} buildRepo && export STASSID='\\\"${{secrets.STASSID}}\\\"' && export STAPSK='\\\"${{secrets.STAPSK}}\\\"' && export WSHOST='\\\"${{secrets.WSHOST}}\\\"' && export WSPATH='\\\"${{secrets.WSPATH}}\\\"' && export WSPORT='${{secrets.WSPORT}}' && export TRAINNAME='\\\"${{ matrix.train }}\\\"' && export THISMDNS='\\\"${{ matrix.localDNS }}\\\"' && ~/.platformio/penv/bin/pio run  --target upload --upload-port ${{ matrix.host }} -e GITHUB && rm -rf buildRepo"
