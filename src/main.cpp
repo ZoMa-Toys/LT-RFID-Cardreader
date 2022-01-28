@@ -4,7 +4,7 @@ void setup() {
   Serial.begin(115200);
   // Connect to wifi
   connectWifi();
-  connectWS(onDataReceived);
+  connectWS();
   createWebSerial(recvMsg);
   createOTA();
   setupMFRC();
