@@ -15,22 +15,16 @@ on:
     secrets:
       STASSID: 
         required: true
-        type: string
       STAPSK: 
         required: true
-        type: string
       WSHOST: 
         required: true
-        type: string
       WSPORT: 
         required: true
-        type: string
       WSPATH: 
         required: true
-        type: string
       SSH_PRIVATE_KEY:
         required: true
-        type: string
 
 
 
