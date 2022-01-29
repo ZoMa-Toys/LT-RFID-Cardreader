@@ -67,7 +67,7 @@ jobs:
           host: ${{secrets.HOST}}
           user: ${{secrets.USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          cmd: "~/makeMatrix.py ${{inputs.matrixparam}}"
+          cmd: "./makeMatrix.py ${{inputs.matrixparam}}"
   buildandupload:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
