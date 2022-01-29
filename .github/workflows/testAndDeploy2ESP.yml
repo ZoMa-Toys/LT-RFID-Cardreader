@@ -25,6 +25,10 @@ on:
         required: true
       SSH_PRIVATE_KEY:
         required: true
+      HOST:
+        required: true
+      USER:
+        required: true
 
 
 

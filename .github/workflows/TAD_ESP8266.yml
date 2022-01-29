@@ -24,3 +24,5 @@ jobs:
       WSPORT: ${{secrets.WSPORT}}
       WSPATH: ${{secrets.WSPATH}}
       SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+      HOST: ${{secrets.HOST}}
+      USER: ${{secrets.USER}}
