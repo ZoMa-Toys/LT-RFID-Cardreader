@@ -17,3 +17,10 @@ jobs:
     with:
       matrixparam: card
       pioenv: GITHUB
+    secrets:
+      STASSID: ${{secrets.STASSID}}
+      STAPSK: ${{secrets.STAPSK}}
+      WSHOST: ${{secrets.WSHOST}}
+      WSPORT: ${{secrets.WSPORT}}
+      WSPATH: ${{secrets.WSPATH}}
+      SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
