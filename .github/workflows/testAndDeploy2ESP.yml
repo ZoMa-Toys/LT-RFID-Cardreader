@@ -81,7 +81,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Deploy to all available ESP8266s
-        uses: ZoMa-Toys/zoma-ssh@1.0
+        uses: ZoMa-Toys/zoma-ssh@1.0.1.1
         id: set-matrix
         with:
           host: ${{secrets.HOST}}
