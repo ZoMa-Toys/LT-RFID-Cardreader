@@ -61,7 +61,7 @@ jobs:
       hostmatrix: ${{ steps.set-matrix.outputs.cmd_output }}
     steps:
       - name: Create matrix for next job
-        uses: ZoMa-Toys/zoma-ssh@1.0
+        uses: ZoMa-Toys/zoma-ssh@1.0.1.1
         id: set-matrix
         with:
           host: ${{secrets.HOST}}
